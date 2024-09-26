@@ -10,8 +10,8 @@ def create_book_category(db: Session, book_category: book_schemas.BookCategoryCr
     db.refresh(new_category)
     return new_category
 
-def get_book_categories(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(book_model.BookCategory).offset(skip).limit(limit).all()
+def get_book_categories(db: Session):
+    return db.query(book_model.BookCategory).all()
 
 def get_book_category(db: Session, category_id: int):
     return db.query(book_model.BookCategory).filter(book_model.BookCategory.id == category_id).first()
@@ -54,12 +54,12 @@ def create_book(db: Session, book: book_schemas.BookCreate):
     return new_book
 
 
-def get_books(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(book_model.Book).offset(skip).limit(limit).all()
+def get_books_by_category(db: Session,category_id):
+    return db.query(book_model.Book).filter(book_model.Book.category_id == category_id).all()
 
 
-def get_book(db: Session, category_id: int):
-    return db.query(book_model.Book).filter(book_model.Book.category_id == category_id).first()
+def get_book(db: Session, book_id: int):
+    return db.query(book_model.Book).filter(book_model.Book.id == book_id).first()
 
 
 def update_book(db: Session, book_id: int, book: book_schemas.BookCreate):

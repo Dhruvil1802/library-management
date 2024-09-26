@@ -18,8 +18,8 @@ def create_new_book_category(book_category: book_schemas.BookCategoryCreate, db:
 
 # Get a list of all book categories with pagination (skip and limit)
 @router.get("/book-categories/", response_model=List[book_schemas.BookCategory])
-def get_book_categories(skip: int = 0, limit: int = 10, db: Session = Depends(get_db),current_user: LibAdmin = Depends(get_current_admin)):
-    return book_crud.get_book_categories(db=db, skip=skip, limit=limit)
+def get_book_categories(db: Session = Depends(get_db),current_user: LibAdmin = Depends(get_current_admin)):
+    return book_crud.get_book_categories(db=db)
 
 # Fetch a specific book category by its ID
 @router.get("/book-categories/{category_id}", response_model=book_schemas.BookCategory)
@@ -54,10 +54,16 @@ def create_book(book: book_schemas.BookCreate, db: Session = Depends(get_db),cur
     return new_book
 
 
-# Get a list of all books with pagination (skip and limit)
-@router.get("/books/", response_model=List[book_schemas.Book])
-def get_books(skip: int = 0, limit: int = 10, db: Session = Depends(get_db),current_user: LibAdmin = Depends(get_current_admin)):
-    return book_crud.get_books(db=db, skip=skip, limit=limit)
+# Get a list of all books with category_id (skip and limit)
+@router.get("/booksbycategory/{category_id}", response_model=List[book_schemas.Book])
+def get_books(category_id: int, db: Session = Depends(get_db), current_user: LibAdmin = Depends(get_current_admin)):
+    
+    books = book_crud.get_books_by_category(db=db, category_id=category_id)
+    
+    if not books:
+        raise HTTPException(status_code=404, detail="No books found for this category")
+    
+    return books
 
 # Fetch a specific book by its ID
 @router.get("/books/{book_id}", response_model=book_schemas.Book)

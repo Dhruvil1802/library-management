@@ -10,7 +10,6 @@ class BorrowedBookBase(BaseModel):
 
 class BorrowedBookCreate(BaseModel):
     book_id: int
-    return_date: datetime
 
 class BorrowedBook(BorrowedBookBase):
     id: int
@@ -18,3 +17,6 @@ class BorrowedBook(BorrowedBookBase):
 
     class Config:
         orm_mode = True
+
+class ReturnBookRequest(BaseModel):
+    borrowed_book_id: int

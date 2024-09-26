@@ -1,10 +1,10 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, constr
 from typing import List, Optional
 
 
 
 class BookCategoryCreate(BaseModel):
-    name: str 
+    name: constr(min_length=1)
 
 class BookCategory(BookCategoryCreate):
     id: int
@@ -13,8 +13,8 @@ class BookCategory(BookCategoryCreate):
         orm_mode = True
 
 class BookBase(BaseModel):
-    title: str 
-    author: str 
+    title: constr(min_length=1)
+    author: constr(min_length=1) 
     category_id: int 
 
 class BookCreate(BookBase):
